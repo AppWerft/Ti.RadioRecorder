@@ -10,56 +10,44 @@ package de.appwerft.radiorecorder;
 
 import org.appcelerator.kroll.KrollModule;
 import org.appcelerator.kroll.annotations.Kroll;
-
 import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.kroll.common.Log;
-import org.appcelerator.kroll.common.TiConfig;
 
+import android.app.Activity;
 
-@Kroll.module(name="Radiorecorder", id="de.appwerft.radiorecorder")
-public class RadiorecorderModule extends KrollModule
-{
+@Kroll.module(name = "Radiorecorder", id = "de.appwerft.radiorecorder")
+public class RadiorecorderModule extends KrollModule {
 
-	// Standard Debugging variables
-	private static final String LCAT = "RadiorecorderModule";
-	private static final boolean DBG = TiConfig.LOGD;
+	private static final String LCAT = "RR 📻";
 
-	// You can define constants with @Kroll.constant, for example:
-	// @Kroll.constant public static final String EXTERNAL_NAME = value;
-
-	public RadiorecorderModule()
-	{
+	public RadiorecorderModule() {
 		super();
 	}
 
 	@Kroll.onAppCreate
-	public static void onAppCreate(TiApplication app)
-	{
+	public static void onAppCreate(TiApplication app) {
 		Log.d(LCAT, "inside onAppCreate");
-		// put module init code that needs to run when the application is created
 	}
 
-	// Methods
-	@Kroll.method
-	public String example()
-	{
-		Log.d(LCAT, "example called");
-		return "hello world";
+	@Override
+	public void onStart(Activity activity) {
+		String rootActivityClassName = TiApplication.getInstance()
+				.getApplicationContext().getPackageName()
+				+ "."
+				+ TiApplication.getAppRootOrCurrentActivity().getClass()
+						.getSimpleName();
+		Log.d(LCAT, "onStart rootActivityClassName = " + rootActivityClassName);
+
+		super.onStart(activity);
 	}
 
-	// Properties
-	@Kroll.getProperty
-	public String getExampleProp()
-	{
-		Log.d(LCAT, "get example property");
-		return "hello world";
+	@Override
+	public void onPause(Activity activity) {
+		String activityClassName = TiApplication.getInstance()
+				.getApplicationContext().getPackageName()
+				+ "."
+				+ TiApplication.getAppCurrentActivity().getClass()
+						.getSimpleName();
+		super.onPause(activity);
 	}
-
-
-	@Kroll.setProperty
-	public void setExampleProp(String value) {
-		Log.d(LCAT, "set example property: " + value);
-	}
-
 }
-
