@@ -11,7 +11,11 @@ var Record = RR.createRecording({
 	file : Ti.Filesystem.getFile(Ti.Filesystem.externalStorageDirectory,"mysuperhörspiel"),
 	duration : 1800, // 30 min.
 	bitrate : 128, //optional for better calculation of recording time
-	notification : true
+	notification : {
+		title : "",
+		subtitle : ""
+		largeIcon : ""
+	}
 });
 Record.start();
 ```
