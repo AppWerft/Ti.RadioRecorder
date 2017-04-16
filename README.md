@@ -12,9 +12,8 @@ var Record = RR.createRecording({
 	duration : 1800, // 30 min.
 	bitrate : 128, //optional for better calculation of recording time
 	notification : {
-		title : "",
-		subtitle : ""
-		largeIcon : ""
+		title : "Hörspiel runtergeholt",
+		subtitle : "Die Verwirrungen des Zöglings Törleß von Robert Musil"
 	}
 });
 Record.start();
