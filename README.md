@@ -1,4 +1,4 @@
-# Ti.RadioRecorder
+# Ti.AndroidRadioRecorder
 This module for Appcelerator Titanium framework realizes a recorder for streaming radio stations. In most cases it will started by Ben Bahrenburgs AlarmManager.
 
 Inside your JS based service you can start recording with:
