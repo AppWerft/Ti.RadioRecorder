@@ -13,15 +13,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
+import org.appcelerator.titanium.TiC;
+import org.appcelerator.titanium.TiFileProxy;
 import org.appcelerator.titanium.util.Log;
 import org.appcelerator.titanium.util.TiConfig;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 
 // This proxy can be created by calling Radiorecorder.createExample({message: "hello world"})
@@ -31,7 +35,7 @@ public class RecorderProxy extends KrollProxy {
 	private static final String LCAT = "ExampleProxy";
 	private static final boolean DBG = TiConfig.LOGD;
 	private String url;
-	private String file;
+	private Uri uri;
 	private int duration;
 
 	// Constructor
@@ -41,8 +45,26 @@ public class RecorderProxy extends KrollProxy {
 
 	// Handle creation options
 	@Override
-	public void handleCreationDict(KrollDict options) {
-		super.handleCreationDict(options);
+	public void handleCreationDict(
+			@Kroll.argument(optional = true) KrollDict opts) {
+		if (opts.containsKeyAndNotNull(TiC.PROPERTY_URL)) {
+			try {
+				URL dummy = new URL(opts.getString(TiC.PROPERTY_URL));
+				url = opts.getString(TiC.PROPERTY_URL);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+		}
+		if (opts.containsKeyAndNotNull(TiC.PROPERTY_FILE)) {
+			Object obj = opts.get(TiC.PROPERTY_FILE);
+			if (obj instanceof TiFileProxy) {
+				uri = Uri.parse(((TiFileProxy) obj).getNativePath());
+			}
+		}
+		if (opts.containsKeyAndNotNull(TiC.PROPERTY_DURATION)) {
+			duration = opts.getInt(TiC.PROPERTY_DURATION);
+		}
+		super.handleCreationDict(opts);
 
 	}
 
@@ -59,7 +81,8 @@ public class RecorderProxy extends KrollProxy {
 			try {
 				URLConnection conn = new URL(url).openConnection();
 				InputStream is = conn.getInputStream();
-				OutputStream outstream = new FileOutputStream(new File(file));
+				OutputStream outstream = new FileOutputStream(new File(
+						uri.getPath()));
 				byte[] buffer = new byte[4096];
 				int len;
 				long t = System.currentTimeMillis();
