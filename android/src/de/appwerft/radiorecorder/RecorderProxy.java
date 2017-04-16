@@ -31,24 +31,21 @@ import android.os.AsyncTask;
 // This proxy can be created by calling Radiorecorder.createExample({message: "hello world"})
 @Kroll.proxy(creatableInModule = RadiorecorderModule.class)
 public class RecorderProxy extends KrollProxy {
-	// Standard Debugging variables
-	private static final String LCAT = "ExampleProxy";
-	private static final boolean DBG = TiConfig.LOGD;
 	private String url;
 	private Uri uri;
 	private int duration;
+	private KrollDict notificationParameters;
 
-	// Constructor
 	public RecorderProxy() {
 		super();
 	}
 
-	// Handle creation options
 	@Override
 	public void handleCreationDict(
 			@Kroll.argument(optional = true) KrollDict opts) {
 		if (opts.containsKeyAndNotNull(TiC.PROPERTY_URL)) {
 			try {
+				@SuppressWarnings("unused")
 				URL dummy = new URL(opts.getString(TiC.PROPERTY_URL));
 				url = opts.getString(TiC.PROPERTY_URL);
 			} catch (MalformedURLException e) {
@@ -63,6 +60,9 @@ public class RecorderProxy extends KrollProxy {
 		}
 		if (opts.containsKeyAndNotNull(TiC.PROPERTY_DURATION)) {
 			duration = opts.getInt(TiC.PROPERTY_DURATION);
+		}
+		if (opts.containsKeyAndNotNull("notification")) {
+			notificationParameters = opts.getKrollDict("notification");
 		}
 		super.handleCreationDict(opts);
 
@@ -80,25 +80,25 @@ public class RecorderProxy extends KrollProxy {
 		protected Void doInBackground(Void... empty) {
 			try {
 				URLConnection conn = new URL(url).openConnection();
-				InputStream is = conn.getInputStream();
-				OutputStream outstream = new FileOutputStream(new File(
+				InputStream inpStream = conn.getInputStream();
+				OutputStream outStream = new FileOutputStream(new File(
 						uri.getPath()));
 				byte[] buffer = new byte[4096];
 				int len;
 				long t = System.currentTimeMillis();
-				while ((len = is.read(buffer)) > 0
+				while ((len = inpStream.read(buffer)) > 0
 						&& System.currentTimeMillis() - t <= duration) {
-					outstream.write(buffer, 0, len);
+					outStream.write(buffer, 0, len);
 				}
-				outstream.close();
+				outStream.close();
 			} catch (Exception e) {
 				System.out.print(e);
 			}
 			return null;
 		}
 
+		@SuppressWarnings("unused")
 		protected void onPostExecute() {
 		}
 	}
-
 }
