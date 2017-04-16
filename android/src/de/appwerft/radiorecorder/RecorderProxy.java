@@ -31,6 +31,7 @@ import android.os.AsyncTask;
 // This proxy can be created by calling Radiorecorder.createExample({message: "hello world"})
 @Kroll.proxy(creatableInModule = RadiorecorderModule.class)
 public class RecorderProxy extends KrollProxy {
+	private final int MILLISEC = 1000;
 	private String url;
 	private Uri uri;
 	private int duration;
@@ -87,10 +88,14 @@ public class RecorderProxy extends KrollProxy {
 				int len;
 				long t = System.currentTimeMillis();
 				while ((len = inpStream.read(buffer)) > 0
-						&& System.currentTimeMillis() - t <= duration) {
+						&& System.currentTimeMillis() - t <= duration
+								* MILLISEC) {
 					outStream.write(buffer, 0, len);
 				}
 				outStream.close();
+				if (notificationParameters != null) {
+					new RecorderNotification(notificationParameters);
+				}
 			} catch (Exception e) {
 				System.out.print(e);
 			}
