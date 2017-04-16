@@ -1,4 +1,4 @@
-# Ti.RadioRecorder
+# Ti.AndroidRadioRecorder
 This module for Appcelerator Titanium framework realizes a recorder for streaming radio stations. In most cases it will started by Ben Bahrenburgs AlarmManager.
 
 Inside your JS based service you can start recording with:
@@ -12,7 +12,7 @@ var Record = RR.createRecording({
 	duration : 1800, // 30 min.
 	bitrate : 128, //optional for better calculation of recording time
 	notification : {
-		title : "Hörspiel runtergeholt",
+		title : "Radio play downloaded",
 		subtitle : "Die Verwirrungen des Zöglings Törleß von Robert Musil"
 	}
 });
