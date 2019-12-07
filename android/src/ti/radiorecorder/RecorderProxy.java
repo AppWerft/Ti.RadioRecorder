@@ -6,7 +6,7 @@
  * Please see the LICENSE included with this distribution for details.
  *
  */
-package de.appwerft.radiorecorder;
+package ti.radiorecorder;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -17,13 +17,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.appcelerator.kroll.KrollModule;
+import org.appcelerator.kroll.annotations.Kroll;
+import org.appcelerator.titanium.TiApplication;
+import org.appcelerator.kroll.common.Log;
+
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
 import org.appcelerator.titanium.TiC;
 import org.appcelerator.titanium.TiFileProxy;
-import org.appcelerator.titanium.util.Log;
-import org.appcelerator.titanium.util.TiConfig;
 
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -93,9 +96,6 @@ public class RecorderProxy extends KrollProxy {
 					outStream.write(buffer, 0, len);
 				}
 				outStream.close();
-				if (notificationParameters != null) {
-					new RecorderNotification(notificationParameters);
-				}
 			} catch (Exception e) {
 				System.out.print(e);
 			}
@@ -104,6 +104,9 @@ public class RecorderProxy extends KrollProxy {
 
 		@SuppressWarnings("unused")
 		protected void onPostExecute() {
+			if (notificationParameters != null) {
+				new RecorderNotification(notificationParameters);
+			}
 		}
 	}
 }
