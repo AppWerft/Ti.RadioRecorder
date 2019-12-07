@@ -16,8 +16,9 @@ var Record = RR.createRecording({
 	duration : 1800, // 30 min.
 	bitrate : 128, //optional for better calculation of recording time
 	notification : {
-		title : "Radio play downloaded",
-		subtitle : "Die Verwirrungen des Zöglings Törleß von Robert Musil"
+	   icon : "http://www.der-audio-verlag.de/content/uploads/die-verwirrungen-des-zoeglings-toerless-musil-robert_978-3-86231-334-1.jpg"
+	   title : "Radio play downloaded",
+	   subtitle : "Die Verwirrungen des Zöglings Törleß von Robert Musil"
 	}
 });
 Record.start();
